@@ -1,7 +1,7 @@
 # 15. Se cuenta con una lista de entrenadores Pokémon. De cada uno de estos se conoce: 
 # nombre, cantidad de torneos ganados, cantidad de batallas perdidas y cantidad de batallas ganadas. 
 # Y además la lista de sus Pokémons, de los cuales se sabe: nombre, nivel, tipo y subtipo. Se pide resolver
-#las siguientes actividades utilizando lista de lista implementando las funciones necesarias:
+# las siguientes actividades utilizando lista de lista implementando las funciones necesarias:
 
 entrenadores = [
     {
