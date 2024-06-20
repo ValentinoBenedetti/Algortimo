@@ -1,0 +1,204 @@
+def encontrar_indice(lista_valores, criterio, valor):
+    for indice, elemento in enumerate(lista_valores):
+        if elemento[criterio] == valor:
+            return indice
+    return None
+
+def mostrar_lista(titulo, lista_valores):
+    print()
+    print(f"{titulo}")
+    for indice, item in enumerate(lista_valores):
+        print(indice, item)
+    print()
+
+def eliminar_elemento(lista_valores, criterio, valor):
+    indice = encontrar_indice(lista_valores, criterio, valor)
+    if indice is not None:
+        return lista_valores.pop(indice)
+
+# Datos de superhéroes
+
+superheroes = [
+    {
+        "nombre": "Spider-Man",
+        "año_aparicion": 1962,
+        "casa_comic": "Marvel",
+        "biografia": "Peter Parker, un joven que obtiene habilidades arácnidas después de ser mordido por una araña radiactiva."
+    },
+    {
+        "nombre": "Batman",
+        "año_aparicion": 1939,
+        "casa_comic": "DC",
+        "biografia": "Bruce Wayne, un millonario que combate el crimen en Gotham City usando su intelecto y habilidades físicas, con su característico traje."
+    },
+    {
+        "nombre": "Mujer Maravilla",
+        "año_aparicion": 1941,
+        "casa_comic": "DC",
+        "biografia": "Diana, princesa de las Amazonas, que lucha por la justicia, el amor y la igualdad en el mundo."
+    },
+    {
+        "nombre": "Iron Man",
+        "año_aparicion": 1963,
+        "casa_comic": "Marvel",
+        "biografia": "Tony Stark, un genio inventor y empresario que crea una armadura avanzada para convertirse en el superhéroe Iron Man."
+    },
+    {
+        "nombre": "Linterna Verde",
+        "año_aparicion": 1940,
+        "casa_comic": "DC",
+        "biografia": "Hal Jordan, un piloto que se convierte en miembro de la Green Lantern Corps, una fuerza policial intergaláctica."
+    },
+    {
+        "nombre": "Wolverine",
+        "año_aparicion": 1974,
+        "casa_comic": "Marvel",
+        "biografia": "Logan, un mutante con habilidades regenerativas y garras de adamantium."
+    },
+    {
+        "nombre": "Doctor Strange",
+        "año_aparicion": 1963,
+        "casa_comic": "Marvel",
+        "biografia": "Stephen Strange, un neurocirujano que se convierte en el Hechicero Supremo para proteger la Tierra contra amenazas místicas."
+    },
+    {
+        "nombre": "Capitana Marvel",
+        "año_aparicion": 1968,
+        "casa_comic": "Marvel",
+        "biografia": "Carol Danvers, una ex-piloto de la Fuerza Aérea que obtiene superpoderes y se convierte en una de las heroínas más poderosas del universo."
+    },
+    {
+        "nombre": "Flash",
+        "año_aparicion": 1940,
+        "casa_comic": "DC",
+        "biografia": "Barry Allen, un científico forense que obtiene la capacidad de moverse a supervelocidad después de un accidente en su laboratorio."
+    },
+    {
+        "nombre": "Star-Lord",
+        "año_aparicion": 1976,
+        "casa_comic": "Marvel",
+        "biografia": "Peter Quill, un aventurero intergaláctico y líder de los Guardianes de la Galaxia."
+    },
+    {
+        "nombre": "Superman",
+        "año_aparicion": 1938,
+        "casa_comic": "DC",
+        "biografia": "Clark Kent, un extraterrestre del planeta Krypton que posee poderes sobrehumanos en la Tierra."
+    },
+    {
+        "nombre": "Aquaman",
+        "año_aparicion": 1941,
+        "casa_comic": "DC",
+        "biografia": "Arthur Curry, el rey de la Atlántida que tiene la capacidad de comunicarse con la vida marina y posee una fuerza sobrehumana."
+    },
+    {
+        "nombre": "Thor",
+        "año_aparicion": 1962,
+        "casa_comic": "Marvel",
+        "biografia": "El dios del trueno, originario de Asgard, que protege tanto su hogar como la Tierra con su poderoso martillo Mjolnir."
+    },
+    {
+        "nombre": "Viuda Negra",
+        "año_aparicion": 1964,
+        "casa_comic": "Marvel",
+        "biografia": "Natasha Romanoff, una espía y asesina altamente entrenada que se convierte en una agente de S.H.I.E.L.D. y miembro de los Vengadores."
+    },
+    {
+        "nombre": "Flecha Verde",
+        "año_aparicion": 1941,
+        "casa_comic": "DC",
+        "biografia": "Oliver Queen, un millonario que combate el crimen como un arquero experto con un arco y una variedad de flechas especiales."
+    }
+]
+
+print("EJERCICIO 5")
+
+# a. Eliminar el nodo que contiene la información de Linterna Verde
+print("EJERCICIO A")
+nombre_a_eliminar = "Linterna Verde"
+criterio_busqueda = "nombre"
+resultado_eliminar = eliminar_elemento(superheroes, criterio_busqueda, nombre_a_eliminar)
+print("Resultado eliminación:", resultado_eliminar)
+mostrar_lista("Lista final:", superheroes)
+
+# b. Mostrar el año de aparición de Wolverine
+print("EJERCICIO B")
+nombre_personaje = "Wolverine"
+def buscar_año_aparicion(lista_valores, nombre_personaje):
+    for personaje in lista_valores:
+        if personaje['nombre'] == nombre_personaje:
+            return personaje.get('año_aparicion', None)
+    return None
+año_aparicion = buscar_año_aparicion(superheroes, nombre_personaje)
+print("El año de aparición de Wolverine es:", año_aparicion)
+
+# c. Cambiar la casa de Dr. Strange a DC
+print("EJERCICIO C")
+nombre_personaje = "Doctor Strange"
+nueva_casa = "DC"
+def cambiar_casa_comic(lista_valores, nombre_personaje, nueva_casa):
+    for personaje in lista_valores:
+        if personaje['nombre'] == nombre_personaje:
+            personaje['casa_comic'] = nueva_casa
+            return personaje
+    return False
+resultado_cambio_casa = cambiar_casa_comic(superheroes, nombre_personaje, nueva_casa)
+print("Cambio de casa de Doctor Strange:", resultado_cambio_casa)
+
+# d. Mostrar el nombre de aquellos superhéroes que en su biografía mencionan la palabra "traje" o "armadura"
+print("EJERCICIO D")
+def buscar_palabras_clave(lista_valores):
+    resultados = []
+    for personaje in lista_valores:
+        if 'biografia' in personaje and ('armadura' in personaje['biografia'] or 'traje' in personaje['biografia']):
+            resultados.append(personaje['nombre'])
+    return resultados if resultados else None
+resultados_palabras_clave = buscar_palabras_clave(superheroes)
+print("Los superhéroes con 'traje' o 'armadura' son:", resultados_palabras_clave)
+
+# e. Mostrar el nombre y la casa de los superhéroes cuya fecha de aparición sea anterior a 1963
+print("EJERCICIO E")
+año_limite = 1963
+def buscar_por_año(lista_valores, año_limite):
+    resultados = []
+    for personaje in lista_valores:
+        if personaje['año_aparicion'] < año_limite:
+            resultados.append((personaje['nombre'], personaje['casa_comic']))
+    return resultados if resultados else None
+resultados_por_año = buscar_por_año(superheroes, año_limite)
+print("Los superhéroes anteriores a 1963 son:", resultados_por_año)
+
+# f. Mostrar la casa a la que pertenecen Capitana Marvel y Mujer Maravilla
+print("EJERCICIO F")
+def buscar_casas(lista_valores):
+    resultados = {}
+    for personaje in lista_valores:
+        if personaje['nombre'] == 'Capitana Marvel' or personaje['nombre'] == 'Mujer Maravilla':
+            resultados[personaje['nombre']] = personaje['casa_comic']
+    return resultados if resultados else None
+resultados_casas = buscar_casas(superheroes)
+print("Las casas de Capitana Marvel y Mujer Maravilla son:", resultados_casas)
+
+# g. Mostrar toda la información de Flash y Star-Lord
+print("EJERCICIO G")
+def buscar_informacion(lista_valores, nombre_personaje):
+    for personaje in lista_valores:
+        if personaje['nombre'] == nombre_personaje:
+            return personaje
+    return None
+info_flash = buscar_informacion(superheroes, 'Flash')
+info_starlord = buscar_informacion(superheroes, 'Star-Lord')
+print("Información de Flash:", info_flash)
+print("Información de Star-Lord:", info_starlord)
+
+# h. Listar los superhéroes que comienzan con la letra B, M, S
+print("EJERCICIO H")
+def buscar_letras(lista_valores, letras):
+    resultados = []
+    for personaje in lista_valores:
+        if personaje['nombre'][0].upper() in letras:
+            resultados.append(personaje['nombre'])
+    return resultados if resultados else None
+letras_buscar = ['B', 'M', 'S']
+resultados_letras = buscar_letras(superheroes, letras_buscar)
+print("Superhéroes que comienzan con B, M o S:", resultados_letras)
