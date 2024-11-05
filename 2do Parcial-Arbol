@@ -1,0 +1,123 @@
+class TreeNode:
+    def __init__(self, key, data):
+        self.key = key  # clave para el índice
+        self.data = data  # datos Pokémon
+        self.left = None  # nodo izquierdo
+        self.right = None  # nodo derecho
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, key, data):
+        if not self.root:
+            self.root = TreeNode(key, data)
+        else:
+            self._insert_recursive(self.root, key, data)
+
+    def _insert_recursive(self, node, key, data):
+        if key < node.key:
+            if node.left is None:
+                node.left = TreeNode(key, data)
+            else:
+                self._insert_recursive(node.left, key, data)
+        else:
+            if node.right is None:
+                node.right = TreeNode(key, data)
+            else:
+                self._insert_recursive(node.right, key, data)
+
+    def search_by_number(self, number):
+        return self._search_recursive(self.root, lambda p: p['numero'] == number)
+
+    def search_by_name(self, name):
+        return self._search_recursive(self.root, lambda p: name.lower() in p['nombre'].lower())
+
+    def _search_recursive(self, node, condition):
+        if node is None:
+            return []
+        result = []
+        if condition(node.data):
+            result.append(node.data)
+        result.extend(self._search_recursive(node.left, condition))
+        result.extend(self._search_recursive(node.right, condition))
+        return result
+
+    def search_by_type(self, type_):
+        return self._search_recursive(self.root, lambda p: type_ in p['tipos'])
+
+    def in_order_traversal(self, node, result):
+        if node is not None:
+            self.in_order_traversal(node.left, result)
+            result.append(node.data)
+            self.in_order_traversal(node.right, result)
+
+def main():
+    
+    pokemons = [
+        {"nombre": "Pikachu", "numero": 25, "tipos": ["eléctrico"], "nivel": 35},
+        {"nombre": "Charmander", "numero": 4, "tipos": ["fuego"], "nivel": 16},
+        {"nombre": "Bulbasaur", "numero": 1, "tipos": ["planta", "veneno"], "nivel": 18},
+        {"nombre": "Squirtle", "numero": 7, "tipos": ["agua"], "nivel": 16},
+        {"nombre": "Jolteon", "numero": 135, "tipos": ["eléctrico"], "nivel": 50},
+        {"nombre": "Lycanroc", "numero": 745, "tipos": ["roca"], "nivel": 40},
+        {"nombre": "Tyrantrum", "numero": 697, "tipos": ["roca", "dragón"], "nivel": 50},
+        {"nombre": "Magikarp", "numero": 129, "tipos": ["agua"], "nivel": 15},
+        {"nombre": "Flareon", "numero": 136, "tipos": ["fuego"], "nivel": 45},
+        {"nombre": "Venusaur", "numero": 3, "tipos": ["planta", "veneno"], "nivel": 45},
+        {"nombre": "Electrode", "numero": 101, "tipos": ["eléctrico"], "nivel": 40},
+        {"nombre": "Steelix", "numero": 208, "tipos": ["acero", "tierra"], "nivel": 50},
+        {"nombre": "Magnemite", "numero": 81, "tipos": ["eléctrico", "acero"], "nivel": 30},
+        {"nombre": "Chikorita", "numero": 152, "tipos": ["planta"], "nivel": 16},
+        {"nombre": "Blaziken", "numero": 257, "tipos": ["fuego", "lucha"], "nivel": 50},
+        {"nombre": "Zapdos", "numero": 145, "tipos": ["eléctrico", "volador"], "nivel": 70},
+    ]
+
+    # Crear árboles para nombre, número y tipo
+    bst_by_name = BinarySearchTree()
+    bst_by_number = BinarySearchTree()
+    bst_by_type = BinarySearchTree()
+
+    for pokemon in pokemons:
+        bst_by_name.insert(pokemon['nombre'].lower(), pokemon)
+        bst_by_number.insert(pokemon['numero'], pokemon)
+        for type_ in pokemon['tipos']:
+            bst_by_type.insert(type_.lower(), pokemon)
+
+    # b) Mostrar datos de Pokémon por nombre (búsqueda por proximidad)
+    pokemon_by_name = bst_by_name.search_by_name("bul")
+    print("\nB:Pokémon que contienen 'bul':", pokemon_by_name)
+
+    # c) Mostrar nombres de Pokémon de tipos específicos
+    tipos_deseados = ["agua", "fuego", "planta", "eléctrico"]
+    for tipo in tipos_deseados:
+        pokemons_of_type = bst_by_type.search_by_type(tipo)
+        print(f"\nC:Pokémon de tipo {tipo}:", [p['nombre'] for p in pokemons_of_type])
+
+    # d) Listar en orden ascendente por número
+    sorted_by_number = []
+    bst_by_number.in_order_traversal(bst_by_number.root, sorted_by_number)
+    print("\nD:Listado de Pokémon por número (ascendente):")
+    for p in sorted_by_number:
+        print(f"Numero: {p['numero']}, Nombre: {p['nombre']}")
+
+    # Listar en orden ascendente por nivel
+    sorted_by_level = sorted(pokemons, key=lambda p: p['nivel'])
+    print("\nD:Listado de Pokémon por nivel (ascendente):")
+    for p in sorted_by_level:
+        print(f"Nivel: {p['nivel']}, Nombre: {p['nombre']}")
+
+    # e) Mostrar datos de Jolteon, Lycanroc y Tyrantrum
+    specific_pokemons = ["Jolteon", "Lycanroc", "Tyrantrum"]
+    for name in specific_pokemons:
+        pokemon = bst_by_name.search_by_name(name)
+        print("\nE:Datos de {name}:", pokemon)
+
+    # f) Determinar cuántos Pokémon hay de tipo eléctrico y acero
+    electric_pokemons_count = len(bst_by_type.search_by_type("eléctrico"))
+    steel_pokemons_count = len(bst_by_type.search_by_type("acero"))
+    print("\nF:Cantidad de Pokémon de tipo eléctrico:", electric_pokemons_count)
+    print("\nF:Cantidad de Pokémon de tipo acero:", steel_pokemons_count)
+
+if __name__ == "__main__":
+    main()
