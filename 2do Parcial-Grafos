@@ -1,0 +1,87 @@
+class Graph:
+    def __init__(self):
+        self.vertices = {}
+
+    def add_character(self, name):
+        self.vertices[name] = {"connections": {}}
+
+    def add_episode(self, character1, character2, episodes):
+        if character1 in self.vertices and character2 in self.vertices:
+            self.vertices[character1]["connections"][character2] = episodes
+            self.vertices[character2]["connections"][character1] = episodes  
+
+    def mst(self):
+        import heapq
+        
+        start_vertex = next(iter(self.vertices)) 
+        visited = set()
+        mst_edges = []
+        min_heap = [(0, start_vertex, None)]  # (peso, nodo actual, nodo padre)
+
+        while min_heap:
+            weight, current_vertex, parent_vertex = heapq.heappop(min_heap)
+            if current_vertex in visited:
+                continue
+            visited.add(current_vertex)
+            if parent_vertex is not None:
+                mst_edges.append((parent_vertex, current_vertex, weight))
+
+            for neighbor, edge_weight in self.vertices[current_vertex]["connections"].items():
+                if neighbor not in visited:
+                    heapq.heappush(min_heap, (edge_weight, neighbor, current_vertex))
+
+        return mst_edges, 'Yoda' in visited
+
+    def max_shared_episodes(self):
+        max_episodes = 0
+        max_pair = ("", "")
+        
+        for character1, data1 in self.vertices.items():
+            for character2, episodes in data1["connections"].items():
+                if episodes > max_episodes:
+                    max_episodes = episodes
+                    max_pair = (character1, character2)
+        
+        return max_pair, max_episodes
+
+
+star_wars_graph = Graph()
+
+# personajes
+characters = [
+    "Luke Skywalker", "Darth Vader", "Yoda", "Boba Fett",
+    "C-3PO", "Leia", "Rey", "Kylo Ren", "Chewbacca", 
+    "Han Solo", "R2-D2", "BB-8"
+]
+
+for character in characters:
+    star_wars_graph.add_character(character)
+
+
+star_wars_graph.add_episode("Luke Skywalker", "Leia", 8)
+star_wars_graph.add_episode("Darth Vader", "Luke Skywalker", 5)
+star_wars_graph.add_episode("Yoda", "Luke Skywalker", 4)
+star_wars_graph.add_episode("C-3PO", "BB-8", 3)
+star_wars_graph.add_episode("Rey", "Finn", 6)
+star_wars_graph.add_episode("Kylo Ren", "Rey", 9)
+star_wars_graph.add_episode("Chewbacca", "Yoda", 2)
+star_wars_graph.add_episode("Han Solo", "Chewbacca", 7)
+star_wars_graph.add_episode("Darth Vader", "Kylo Ren", 1)
+star_wars_graph.add_episode("Boba Fett", "Han Solo", 4)
+star_wars_graph.add_episode("C-3PO", "Leia", 5)
+star_wars_graph.add_episode("R2-D2", "Luke Skywalker", 3)
+
+
+# Obtener el árbol de expansión mínimo
+# Peso = Cantidad de episodios 
+mst_result, contains_yoda = star_wars_graph.mst()
+print(f"\nB: Árbol de Expansión Mínimo (MST):")
+for edge in mst_result:
+    print(f"{edge[0]} <-> {edge[1]} (Episodios: {edge[2]})")
+
+# contiene a Yoda?
+print(f"\n¿El árbol de expansión mínimo contiene a Yoda? {'Sí' if contains_yoda else 'No'}")
+
+# Número máximo de episodios compartidos
+max_pair, max_episodes = star_wars_graph.max_shared_episodes()
+print(f"\nC:Los personajes que comparten el mayor número de episodios son: {max_pair[0]} y {max_pair[1]} con {max_episodes} episodios compartidos.")
